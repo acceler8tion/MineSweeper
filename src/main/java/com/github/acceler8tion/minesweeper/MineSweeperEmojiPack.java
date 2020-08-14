@@ -41,7 +41,7 @@ public class MineSweeperEmojiPack {
         String em;
         switch (num) { //it succccccccccccccccccccccccccccccks
             case 0:
-                em = UNOPEN;
+                em = EMPTY;
                 break;
             case 1:
                 em = ONE;

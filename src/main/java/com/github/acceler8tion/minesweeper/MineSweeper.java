@@ -1,7 +1,5 @@
 package com.github.acceler8tion.minesweeper;
 
-import jdk.internal.org.jline.utils.Display;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -34,6 +32,11 @@ public class MineSweeper<T> {
         this.metaData = metaData;
         this.leftTile = new AtomicInteger(x*y-bomb);
         this.leftBomb = new AtomicInteger(bomb);
+        for(int i = 0; i < this.y; i++){
+            for(int k = 0; k < this.x; k++){
+                this.table[i][k] = new Cell(0, false, false);
+            }
+        }
     }
 
     public static <U> MineSweeper<U> create(int x, int y, int bomb, U owner) {
@@ -46,14 +49,19 @@ public class MineSweeper<T> {
 
     //Utils
     private boolean safe(int x, int y) {
-        return 0 <= x && x < this.x && 0 <= y && y < this.y;
+        return x >= 0 && x < this.x && y >= 0 && y < this.y;
     }
+
     private int[] split(int cod) {
-        return new int[]{cod%x, cod/x};
+        return new int[]{cod%this.x, cod/this.x};
     }
 
     private void accessAroundTiles(int x, int y, BiConsumer<Integer, Integer> accessor) {
-        if(safe(x, y)) accessor.accept(x, y);
+        for(int[] r : around){
+            int nx = x + r[0];
+            int ny = y + r[1];
+            if(safe(nx, ny)) accessor.accept(nx, ny);
+        }
     }
 
     //Mains
@@ -73,7 +81,9 @@ public class MineSweeper<T> {
             int[] r = split(c);
             this.table[r[1]][r[0]].tile = BOMB;
             accessAroundTiles(r[0], r[1], (x2,y2) -> {
-                if(!this.table[y2][x2].isBomb()) this.table[y2][x2].tile += 1;
+                if(!table[y2][x2].isBomb()) {
+                    this.table[y2][x2].tile += 1;
+                }
             });
         }
     }
@@ -158,6 +168,38 @@ public class MineSweeper<T> {
             }
         }
         return dis.toString();
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public MineSweeperMetaData<T> getMetaData() {
+        return metaData;
+    }
+
+    public AtomicInteger getLeftTile() {
+        return leftTile;
+    }
+
+    public AtomicInteger getLeftBomb() {
+        return leftBomb;
+    }
+
+    public boolean isDie() {
+        return die;
+    }
+
+    public void setDie(boolean die) {
+        this.die = die;
     }
 
     private static class Cell {
