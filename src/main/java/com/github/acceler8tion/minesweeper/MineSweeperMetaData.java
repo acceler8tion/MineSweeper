@@ -8,8 +8,8 @@ public class MineSweeperMetaData<T> {
     private String id;
     private final T owner;
     private final float rate;
-    private long start;
-    private long endAt;
+    private long start = 0L;
+    private long end = 0L;
     private final HashMap<String, Contribution<T>> participants;
 
     private MineSweeperMetaData(String id, T owner, float rate, HashMap<String, Contribution<T>> participants) {
@@ -43,12 +43,12 @@ public class MineSweeperMetaData<T> {
         this.start = start;
     }
 
-    public long getEndAt() {
-        return endAt;
+    public long getEnd() {
+        return end;
     }
 
-    public void setEndAt(long endAt) {
-        this.endAt = endAt;
+    public void setEnd(long end) {
+        this.end = end;
     }
 
     public HashMap<String, Contribution<T>> getPlayers() {
@@ -66,6 +66,27 @@ public class MineSweeperMetaData<T> {
     
     public void updateContribution(String id, Contribution<T> con) {
         participants.replace(id, con);
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof MineSweeperMetaData)) {
+            return false;
+        }
+        MineSweeperMetaData mtd = (MineSweeperMetaData) obj;
+        return id.equals(mtd.id) && mtd.rate == rate && owner.equals(mtd.owner) && mtd.start == start && mtd.end == end;
+    }
+
+    @Override
+    public String toString() {
+        return "MineSweeperMetaData["+
+                "id="+id+
+                ", owner="+owner.toString()+
+                ", rate="+rate+
+                ", start="+start+
+                ", end="+end+
+                ", participants="+participants.toString();
     }
 
     public static class Contribution<T> {

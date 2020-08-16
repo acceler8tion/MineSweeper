@@ -7,16 +7,14 @@ public class TestMain {
             String id = "855735";
             User user = new User(id, "acceler8tion");
             MineSweeper<User> ms = MineSweeper.create(10, 10, 11, user);
-            MineSweeperEmojiPack emp = new MineSweeperEmojiPack("e", "1", "2", "3", "4", "5", "6", "7", "8",
-                                                                    "B", "F", "O", "X", "x");
             ms.getMetaData().putPlayers(id, user);
             MineSweeperMetaData.Contribution<User> con = ms.getMetaData().getPlayerById(id);
             ms.setMine(1, 1);
-            System.out.println(ms.display(MineSweeperDisplay.ONGOING, 1, 1, emp));
+            System.out.println(ms.display(MineSweeperDisplay.ONGOING, 1, 1, MineSweeper.DEFAULT_EMP));
             ms.open(0, 0, false, () -> {
                 con.increase(1);
             });
-            System.out.println(ms.display(MineSweeperDisplay.ONGOING, 1, 1, emp));
+            System.out.println(ms.display(MineSweeperDisplay.ONGOING, 1, 1, MineSweeper.DEFAULT_EMP));
         } catch (Exception e) {
             e.printStackTrace();
         }

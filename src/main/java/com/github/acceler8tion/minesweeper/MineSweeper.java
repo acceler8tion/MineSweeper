@@ -23,6 +23,9 @@ public class MineSweeper<T> {
     private static final int EMPTY = 0;
     private static final int BOMB = 9;
 
+    public static final MineSweeperEmojiPack DEFAULT_EMP = new MineSweeperEmojiPack("e", "1", "2", "3", "4", "5", "6", "7", "8",
+            "B", "F", "O", "X", "x");
+
     private MineSweeper(int x, int y, int bomb, MineSweeperMetaData<T> metaData){
         this.x = x;
         this.y = y;
@@ -200,6 +203,28 @@ public class MineSweeper<T> {
 
     public void setDie(boolean die) {
         this.die = die;
+    }
+
+    @SuppressWarnings("rawtypes")
+    @Override
+    public boolean equals(Object obj) {
+        if(!(obj instanceof MineSweeper)) {
+            return false;
+        }
+        MineSweeper m = (MineSweeper) obj;
+        return m.x == x && m.y == y && m.bomb == bomb && metaData.equals(m.metaData);
+    }
+
+    @Override
+    public String toString() {
+        return "MineSweeper["+
+                "x="+x+
+                ", y="+y+
+                ", bomb="+bomb+
+                ", metaData="+metaData.toString()+
+                ", leftTile="+leftTile.get()+
+                ", leftBomb="+leftBomb.get()+
+                "]";
     }
 
     private static class Cell {
